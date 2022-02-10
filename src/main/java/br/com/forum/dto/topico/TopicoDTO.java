@@ -1,9 +1,6 @@
-package br.com.forum.controller.dto;
+package br.com.forum.dto;
 
-import br.com.forum.modelo.Topico;
 import lombok.Data;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
