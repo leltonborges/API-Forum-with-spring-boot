@@ -1,6 +1,7 @@
 package br.com.forum.exception;
 
 import br.com.forum.exception.curso.NotFoundCursoException;
+import br.com.forum.exception.topico.NotfoundTopicoException;
 import br.com.forum.exception.validation.ValidatationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,6 +23,15 @@ public class HandlerExceptionConfig {
 
     @ExceptionHandler(NotFoundCursoException.class)
     public ResponseEntity<StandardError> notFoundCurso(NotFoundCursoException ex, HttpServletRequest request){
+        StandardError error =
+                new StandardError(ex.getMessage(), request.getRequestURI(),
+                        HttpStatus.NOT_FOUND, System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(NotfoundTopicoException.class)
+    public ResponseEntity<StandardError> notFoundTopico(NotfoundTopicoException ex, HttpServletRequest request){
         StandardError error =
                 new StandardError(ex.getMessage(), request.getRequestURI(),
                         HttpStatus.NOT_FOUND, System.currentTimeMillis());

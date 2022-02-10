@@ -1,5 +1,6 @@
 package br.com.forum.controller;
 
+import br.com.forum.dto.topico.DetalhesTopico;
 import br.com.forum.dto.topico.NewTopicoDTO;
 import br.com.forum.dto.topico.TopicoDTO;
 import br.com.forum.modelo.Topico;
@@ -44,5 +45,11 @@ public class TopicosController {
         topicoService.save(topico);
         URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(topicoService.fromDTO(topico));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DetalhesTopico> detalhar(@PathVariable Long id){
+        Topico topico = this.topicoService.findById(id);
+        return ResponseEntity.ok(this.topicoService.fromDetalhesTopico(topico));
     }
 }

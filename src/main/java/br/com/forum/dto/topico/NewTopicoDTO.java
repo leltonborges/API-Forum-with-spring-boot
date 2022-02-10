@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 public class NewTopicoDTO {
 
     @NotBlank
-    @Length(min = 5)
+    @Length(min = 5, max = 150)
     private String titulo;
     @NotBlank
     private String mensagem;
