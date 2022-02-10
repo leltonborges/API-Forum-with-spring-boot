@@ -63,10 +63,9 @@ public class TopicoService {
                 .findByNome(newTopicoDTO.getCurso())
                 .orElseThrow(() -> new RuntimeException("Erro ao encontrar o curso: " + newTopicoDTO.getCurso()));
 
-        return this.mapper.map(cursoOptional, Topico.class, "curso");
-//        return this.mapper.typeMap(NewTopicoDTO.class, Topico.class)
-//                .addMapping(src -> cursoOptional, (dest, v) -> dest.setCurso(cursoOptional))
-//                .map(newTopicoDTO);
+        return this.mapper.typeMap(NewTopicoDTO.class, Topico.class)
+                .addMapping(src -> cursoOptional, (dest, v) -> dest.setCurso(cursoOptional))
+                .map(newTopicoDTO);
     }
 
 }
