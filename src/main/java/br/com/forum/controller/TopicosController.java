@@ -2,6 +2,7 @@ package br.com.forum.controller;
 
 import br.com.forum.dto.topico.DetalhesTopico;
 import br.com.forum.dto.topico.NewTopicoDTO;
+import br.com.forum.dto.topico.TopicoAtualizar;
 import br.com.forum.dto.topico.TopicoDTO;
 import br.com.forum.modelo.Topico;
 import br.com.forum.service.CursoService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -51,5 +53,14 @@ public class TopicosController {
     public ResponseEntity<DetalhesTopico> detalhar(@PathVariable Long id){
         Topico topico = this.topicoService.findById(id);
         return ResponseEntity.ok(this.topicoService.fromDetalhesTopico(topico));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<TopicoDTO> atualizar(@PathVariable Long id, @Valid@ RequestBody TopicoAtualizar topicoAtualizar){
+        Topico topico = this.topicoService.findById(id);
+        this.topicoService.from(topicoAtualizar, topico);
+        this.topicoService.save(topico);
+        return ResponseEntity.ok(this.topicoService.fromDTO(topico));
     }
 }

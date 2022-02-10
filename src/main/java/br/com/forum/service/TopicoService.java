@@ -3,6 +3,7 @@ package br.com.forum.service;
 import br.com.forum.dto.resposta.RespostaDTO;
 import br.com.forum.dto.topico.DetalhesTopico;
 import br.com.forum.dto.topico.NewTopicoDTO;
+import br.com.forum.dto.topico.TopicoAtualizar;
 import br.com.forum.dto.topico.TopicoDTO;
 import br.com.forum.exception.curso.NotFoundCursoException;
 import br.com.forum.exception.topico.NotfoundTopicoException;
@@ -83,4 +84,7 @@ public class TopicoService {
         return this.mapper.map(topico, DetalhesTopico.class);
     }
 
+    public void from(TopicoAtualizar topicoAtualizar, Topico topico) {
+        this.mapper.map(topicoAtualizar, topico);
+    }
 }
