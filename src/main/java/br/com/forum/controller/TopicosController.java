@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class TopicosController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicoDTO> cadastrar(@RequestBody NewTopicoDTO newTopicoDTO, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<TopicoDTO> cadastrar(@Valid @RequestBody NewTopicoDTO newTopicoDTO, UriComponentsBuilder uriBuilder){
         Topico topico = topicoService.from(newTopicoDTO);
         topicoService.save(topico);
         URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
