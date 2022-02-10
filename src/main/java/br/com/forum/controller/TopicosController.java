@@ -39,7 +39,7 @@ public class TopicosController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicoDTO> cadastrar(@Valid @RequestBody NewTopicoDTO newTopicoDTO, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid NewTopicoDTO newTopicoDTO, UriComponentsBuilder uriBuilder){
         Topico topico = topicoService.from(newTopicoDTO);
         topicoService.save(topico);
         URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();

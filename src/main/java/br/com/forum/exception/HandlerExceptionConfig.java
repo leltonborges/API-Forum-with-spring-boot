@@ -2,6 +2,9 @@ package br.com.forum.exception;
 
 import br.com.forum.exception.curso.NotFoundCursoException;
 import br.com.forum.exception.validation.ValidatationError;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class HandlerExceptionConfig {
 
+    @Autowired
+    private MessageSource messageSource; // mensagem por idioma
 
     @ExceptionHandler(NotFoundCursoException.class)
     public ResponseEntity<StandardError> notFoundCurso(NotFoundCursoException ex, HttpServletRequest request){
@@ -29,11 +34,11 @@ public class HandlerExceptionConfig {
         ValidatationError error =
                 new ValidatationError("Error validation", request.getRequestURI(), HttpStatus.UNPROCESSABLE_ENTITY, System.currentTimeMillis());
 
-        for(FieldError field : e.getFieldErrors()){
-            error.addError(field.getField(), field.getDefaultMessage());
-        }
-        System.out.println("\n\naqui\n\n");
+        e.getFieldErrors().parallelStream().forEach(field -> {
+            error.addError(field.getField(), messageSource.getMessage(field, LocaleContextHolder.getLocale()));
+        });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
 }

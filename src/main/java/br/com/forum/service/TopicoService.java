@@ -2,6 +2,7 @@ package br.com.forum.service;
 
 import br.com.forum.dto.topico.NewTopicoDTO;
 import br.com.forum.dto.topico.TopicoDTO;
+import br.com.forum.exception.curso.NotFoundCursoException;
 import br.com.forum.modelo.Curso;
 import br.com.forum.modelo.Topico;
 import br.com.forum.repository.CursoRepository;
@@ -60,7 +61,7 @@ public class TopicoService {
     public Topico from(NewTopicoDTO newTopicoDTO){
         Curso cursoOptional = this.cursoRepository
                 .findByNome(newTopicoDTO.getCurso())
-                .orElseThrow(() -> new RuntimeException("Erro ao encontrar o curso: " + newTopicoDTO.getCurso()));
+                .orElseThrow(() -> new NotFoundCursoException("Erro ao encontrar o curso: " + newTopicoDTO.getCurso()));
 
         return this.mapper.typeMap(NewTopicoDTO.class, Topico.class)
                 .addMapping(src -> cursoOptional, (dest, v) -> dest.setCurso(cursoOptional))
