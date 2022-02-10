@@ -2,7 +2,7 @@ spring:
   application:
     name: app-forum
   datasource:
-    url: jdb:h2:mem:forumtest
+    url: jdbc:h2:mem:forumtest
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -13,8 +13,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-
-
+    defer-datasource-initialization: true
   h2:
     console:
       enabled: true
