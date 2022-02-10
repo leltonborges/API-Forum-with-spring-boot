@@ -6,6 +6,7 @@ import br.com.forum.exception.validation.ValidatationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -50,5 +51,16 @@ public class HandlerExceptionConfig {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> notValidationException(DataIntegrityViolationException ex, HttpServletRequest request){
+        StandardError error =
+                new StandardError(ex.getCause().getCause().getMessage(), request.getRequestURI(),
+                        HttpStatus.BAD_REQUEST, System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+
 
 }

@@ -1,6 +1,5 @@
 package br.com.forum.service;
 
-import br.com.forum.dto.resposta.RespostaDTO;
 import br.com.forum.dto.topico.DetalhesTopico;
 import br.com.forum.dto.topico.NewTopicoDTO;
 import br.com.forum.dto.topico.TopicoAtualizar;
@@ -8,7 +7,6 @@ import br.com.forum.dto.topico.TopicoDTO;
 import br.com.forum.exception.curso.NotFoundCursoException;
 import br.com.forum.exception.topico.NotfoundTopicoException;
 import br.com.forum.modelo.Curso;
-import br.com.forum.modelo.Resposta;
 import br.com.forum.modelo.Topico;
 import br.com.forum.repository.CursoRepository;
 import br.com.forum.repository.TopicoRepository;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,8 +47,8 @@ public class TopicoService {
         return topicoRepository.save(entity);
     }
 
-    public void deleteById(Long aLong) {
-        topicoRepository.deleteById(aLong);
+    public void deleteById(Long id) {
+        topicoRepository.deleteById(id);
     }
 
     public void delete(Topico entity) {

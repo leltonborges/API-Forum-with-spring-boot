@@ -42,6 +42,7 @@ public class TopicosController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid NewTopicoDTO newTopicoDTO, UriComponentsBuilder uriBuilder){
         Topico topico = topicoService.from(newTopicoDTO);
         topicoService.save(topico);
@@ -63,4 +64,12 @@ public class TopicosController {
         this.topicoService.save(topico);
         return ResponseEntity.ok(this.topicoService.fromDTO(topico));
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> remover(@PathVariable Long id){
+        this.topicoService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
