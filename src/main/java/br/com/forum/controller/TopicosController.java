@@ -1,22 +1,27 @@
 package br.com.forum.controller;
 
-import br.com.forum.controller.dto.TopicoDTO;
+import br.com.forum.dto.topico.NewTopicoDTO;
+import br.com.forum.dto.topico.TopicoDTO;
+import br.com.forum.service.CursoService;
 import br.com.forum.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("topicos")
 public class TopicosController {
 
     @Autowired
     private TopicoService topicoService;
+    @Autowired
+    private CursoService cursoService;
 
-    @RequestMapping("/topicos")
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
     @ResponseBody
     public List<TopicoDTO> lista(
             @RequestParam(value = "nomeCurso", defaultValue = "") String nomeCurso
@@ -26,5 +31,10 @@ public class TopicosController {
         else {
             return this.topicoService.findByCursoNome(nomeCurso);
         }
+    }
+
+    @PostMapping
+    public void cadastrar(@RequestBody NewTopicoDTO newTopicoDTO){
+
     }
 }

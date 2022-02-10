@@ -2,13 +2,10 @@ package br.com.forum.dto.topico;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-public class TopicoDTO {
+public class NewTopicoDTO {
 
-    private Long id;
     private String titulo;
     private String mensagem;
-    private LocalDateTime dataCriacao;
+    private String curso;
 }
