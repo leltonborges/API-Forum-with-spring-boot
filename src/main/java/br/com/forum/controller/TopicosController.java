@@ -7,8 +7,10 @@ import br.com.forum.dto.topico.TopicoDTO;
 import br.com.forum.modelo.Topico;
 import br.com.forum.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -28,10 +30,8 @@ public class TopicosController {
     @Autowired
     private TopicoService topicoService;
 
-    @GetMapping(
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    @ResponseBody
+    @Cacheable(cacheNames = "Topicos", key = "#root.methodName")
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<TopicoDTO> lista(
             @RequestParam(value = "nomeCurso", defaultValue = "") String nomeCurso,
             @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
@@ -44,6 +44,7 @@ public class TopicosController {
         }
     }
 
+    @CacheEvict(cacheNames = "Topicos", allEntries = true)
     @PostMapping
     @Transactional
     public ResponseEntity<TopicoDTO> cadastrar(@RequestBody @Valid NewTopicoDTO newTopicoDTO, UriComponentsBuilder uriBuilder){
@@ -60,6 +61,7 @@ public class TopicosController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(cacheNames = "Topicos", allEntries = true)
     @Transactional
     public ResponseEntity<TopicoDTO> atualizar(@PathVariable Long id, @Valid@ RequestBody TopicoAtualizar topicoAtualizar){
         Topico topico = this.topicoService.findById(id);
@@ -69,6 +71,8 @@ public class TopicosController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(cacheNames = "Topicos", allEntries = true)
+    @CachePut(cacheNames = "Topicos")
     @Transactional
     public ResponseEntity<Void> remover(@PathVariable Long id){
         this.topicoService.deleteById(id);
