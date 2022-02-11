@@ -5,3 +5,9 @@ spring:
 server:
   port: 8090
 
+forum:
+  jwt:
+    secret: 3534gegfgd3645tbshdf09ubejn
+    expiration: 86400000
+
+
