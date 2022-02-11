@@ -5,9 +5,12 @@ import br.com.forum.dto.topico.NewTopicoDTO;
 import br.com.forum.dto.topico.TopicoAtualizar;
 import br.com.forum.dto.topico.TopicoDTO;
 import br.com.forum.modelo.Topico;
-import br.com.forum.service.CursoService;
 import br.com.forum.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("topicos")
@@ -24,20 +26,25 @@ public class TopicosController {
 
     @Autowired
     private TopicoService topicoService;
-    @Autowired
-    private CursoService cursoService;
 
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public List<TopicoDTO> lista(
-            @RequestParam(value = "nomeCurso", defaultValue = "") String nomeCurso
+    public Page<TopicoDTO> lista(
+            @RequestParam(value = "nomeCurso", defaultValue = "") String nomeCurso,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "qtd") int qtd,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            @RequestParam(value = "orderBy", defaultValue = "id") String orderBy
     ){
-        if (nomeCurso.isBlank())
-            return this.topicoService.findAll();
+        Sort.Direction sort = direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, qtd, sort, orderBy);
+        if (nomeCurso.isBlank()) {
+            return this.topicoService.findAll(pageable).map(this.topicoService::fromDTO);
+        }
         else {
-            return this.topicoService.findByCursoNome(nomeCurso);
+            return this.topicoService.findByCursoNome(nomeCurso, pageable).map(this.topicoService::fromDTO);
         }
     }
 

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -43,7 +44,7 @@ public class HandlerExceptionConfig {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> notValidationException(MethodArgumentNotValidException e, HttpServletRequest request){
         ValidatationError error =
-                new ValidatationError("Error validation", request.getRequestURI(), HttpStatus.UNPROCESSABLE_ENTITY, System.currentTimeMillis());
+                new ValidatationError("Error validation", request.getRequestURI(), HttpStatus.BAD_REQUEST, System.currentTimeMillis());
 
         e.getFieldErrors().parallelStream().forEach(field -> {
             error.addError(field.getField(), messageSource.getMessage(field, LocaleContextHolder.getLocale()));
@@ -57,6 +58,16 @@ public class HandlerExceptionConfig {
         StandardError error =
                 new StandardError(ex.getCause().getCause().getMessage(), request.getRequestURI(),
                         HttpStatus.BAD_REQUEST, System.currentTimeMillis());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<StandardError> requestParameterException(MissingServletRequestParameterException ex, HttpServletRequest request){
+        ValidatationError error =
+                new ValidatationError("Request parameter", request.getRequestURI(), HttpStatus.BAD_REQUEST, System.currentTimeMillis());
+
+       error.addError(ex.getParameterName(), ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }

@@ -12,6 +12,8 @@ import br.com.forum.repository.CursoRepository;
 import br.com.forum.repository.TopicoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,16 +53,13 @@ public class TopicoService {
         topicoRepository.deleteById(id);
     }
 
-    public void delete(Topico entity) {
-        topicoRepository.delete(entity);
+    public Page<Topico> findAll(Pageable pageable) {
+        return topicoRepository.findAll(pageable);
     }
 
-    public List<TopicoDTO> findByCursoNome(String nameCurso) {
+    public Page<Topico> findByCursoNome(String nameCurso, Pageable pageable) {
         return topicoRepository
-                .findByCurso_Nome(nameCurso)
-                .parallelStream()
-                .map(this::fromDTO)
-                .collect(Collectors.toList());
+                .findByCurso_Nome(nameCurso, pageable);
     }
 
     public TopicoDTO fromDTO(Topico topico) {
