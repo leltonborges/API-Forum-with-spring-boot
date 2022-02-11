@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,8 @@ public class TopicosController {
     @ResponseBody
     public Page<TopicoDTO> lista(
             @RequestParam(value = "nomeCurso", defaultValue = "") String nomeCurso,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "qtd") int qtd,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction,
-            @RequestParam(value = "orderBy", defaultValue = "id") String orderBy
+            @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ){
-        Sort.Direction sort = direction.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, qtd, sort, orderBy);
         if (nomeCurso.isBlank()) {
             return this.topicoService.findAll(pageable).map(this.topicoService::fromDTO);
         }
