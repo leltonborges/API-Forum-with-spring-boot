@@ -2,13 +2,22 @@ spring:
   profiles:
     active: test
 
+  # Spring boot admin server
+  boot:
+    admin:
+      client:
+        url: http://localhost:8091
+
 server:
   port: 8090
 
+# spring security
 forum:
   jwt:
     secret: 3534gegfgd3645tbshdf09ubejn
     expiration: 86400000
+
+# actuator
 management:
   endpoint:
     health:
@@ -23,3 +32,7 @@ info:
   app:
     name: @project.name@ # Nome da aplicação no pom.xml
     version: @project.version@ # Versão da aplicação no pom.xml
+    description: @project.description@
+    encoding: @project.build.sourceEncoding@
+    java:
+      version: @java.version@
