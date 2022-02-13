@@ -3,6 +3,10 @@ package br.com.forum.exception;
 import br.com.forum.exception.curso.NotFoundCursoException;
 import br.com.forum.exception.topico.NotfoundTopicoException;
 import br.com.forum.exception.validation.ValidatationError;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -72,6 +76,13 @@ public class HandlerExceptionConfig {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler({ExpiredJwtException.class, UnsupportedJwtException.class, MalformedJwtException.class, SignatureException.class})
+    public ResponseEntity<StandardError> tokenErro(RuntimeException ex, HttpServletRequest request){
+        StandardError error =
+                new StandardError(ex.getCause().getMessage(), request.getRequestURI(),
+                        HttpStatus.FORBIDDEN, System.currentTimeMillis());
 
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
 
 }

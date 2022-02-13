@@ -31,15 +31,15 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginForm loginForm){
-        try {
+//        try {
         UsernamePasswordAuthenticationToken authenticationToken = loginForm.converter();
         Authentication authenticate = this.authenticationManager.authenticate(authenticationToken);
 
         String token = tokenService.gerarToken(authenticate);
         return ResponseEntity.ok(new TokenDTO(token, "Bearer"));
 
-        }catch (AuthenticationException ex){
-            return  ResponseEntity.badRequest().build();
-        }
+//        }catch (AuthenticationException ex){
+//            return  ResponseEntity.badRequest().build();
+//        }
     }
 }
