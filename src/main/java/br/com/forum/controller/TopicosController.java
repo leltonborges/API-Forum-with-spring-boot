@@ -30,12 +30,13 @@ public class TopicosController {
     @Autowired
     private TopicoService topicoService;
 
-    @Cacheable(cacheNames = "Topicos", key = "#root.methodName")
+//    @Cacheable(cacheNames = "Topicos", key = "#root.methodName")
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public Page<TopicoDTO> lista(
             @RequestParam(value = "nomeCurso", defaultValue = "") String nomeCurso,
-            @PageableDefault(page = 0, size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = 2, sort = "id") Pageable pageable
     ){
+
         if (nomeCurso.isBlank()) {
             return this.topicoService.findAll(pageable).map(this.topicoService::fromDTO);
         }
