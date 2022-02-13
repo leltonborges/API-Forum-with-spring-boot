@@ -29,7 +29,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     // Configurações de recursos estaticos (js, css, images, etc...)
     @Override
     public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
+        web
+                .ignoring()
+                .antMatchers("/**.html", "/v2/api-docs", "/webjars/**",
+                        "/configuration/**", "swagger-resources/**");
     }
 
     // Configurações de autenticações
@@ -44,6 +47,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/topicos", "/actuator/**").permitAll()
+                .antMatchers("/swagger-ui/**", "/javainuse-openapi/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .anyRequest().authenticated()
