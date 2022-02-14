@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
 
   # Spring boot admin server
   boot:
@@ -30,8 +30,10 @@ management:
 
 info:
   app:
-    name: @project.name@ # Nome da aplicação no pom.xml
-    version: @project.version@ # Versão da aplicação no pom.xml
+    # Nome da aplicação no pom.xml
+    name: @project.name@
+    # Versão da aplicação no pom.xml
+    version: @project.version@
     description: @project.description@
     encoding: @project.build.sourceEncoding@
     java:
